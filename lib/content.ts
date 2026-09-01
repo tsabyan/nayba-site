@@ -1,0 +1,84 @@
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+
+const DIR = path.join(process.cwd(), "content", "portofolio");
+
+export type Hasil = { angka: string; label: string; catatan?: string };
+
+export type Karya = {
+  slug: string;
+  judul: string;
+  /** Client's real name. Only ever rendered when `izinNama` is true. */
+  klien: string;
+  /** Written permission to publish the client name. Defaults to false. */
+  izinNama: boolean;
+  sektor: string;
+  kota: string;
+  tahun: number;
+  durasiMinggu: number;
+  layanan: string[];
+  ringkasan: string;
+  peran: string[];
+  tumpukan: string[];
+  hasil: Hasil[];
+  gambarUtama?: string;
+  tampilkan: boolean;
+  urutan: number;
+  isi: string;
+};
+
+/**
+ * What the site is allowed to call this client.
+ *
+ * Gating the name at the data layer rather than remembering to redact it in
+ * each template means an NDA cannot be broken by forgetting.
+ */
+export function namaKlien(k: Karya): string {
+  return k.izinNama ? k.klien : `${k.sektor}, ${k.kota}`;
+}
+
+function baca(berkas: string): Karya {
+  const slug = berkas.replace(/\.mdx$/, "");
+  const { data, content } = matter(
+    fs.readFileSync(path.join(DIR, berkas), "utf8"),
+  );
+
+  return {
+    slug,
+    judul: data.judul ?? slug,
+    klien: data.klien ?? "",
+    izinNama: data.izinNama === true,
+    sektor: data.sektor ?? "",
+    kota: data.kota ?? "",
+    tahun: Number(data.tahun ?? 0),
+    durasiMinggu: Number(data.durasiMinggu ?? 0),
+    layanan: data.layanan ?? [],
+    ringkasan: data.ringkasan ?? "",
+    peran: data.peran ?? [],
+    tumpukan: data.tumpukan ?? [],
+    hasil: data.hasil ?? [],
+    gambarUtama: data.gambarUtama,
+    tampilkan: data.tampilkan !== false,
+    urutan: Number(data.urutan ?? 99),
+    isi: content,
+  };
+}
+
+export function semuaKarya(): Karya[] {
+  if (!fs.existsSync(DIR)) return [];
+  return fs
+    .readdirSync(DIR)
+    .filter((f) => f.endsWith(".mdx"))
+    .map(baca)
+    .filter((k) => k.tampilkan)
+    .sort((a, b) => a.urutan - b.urutan || b.tahun - a.tahun);
+}
+
+export function karyaTerpilih(jumlah = 3): Karya[] {
+  return semuaKarya().slice(0, jumlah);
+}
+
+export function satuKarya(slug: string): Karya | undefined {
+  return semuaKarya().find((k) => k.slug === slug);
+}

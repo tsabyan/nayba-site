@@ -1,0 +1,68 @@
+---
+judul: Website perusahaan yang akhirnya dipakai tim penjualan
+klien: ""
+izinNama: false
+sektor: Distributor farmasi
+kota: Surabaya
+tahun: 2025
+durasiMinggu: 8
+layanan: ["Website perusahaan"]
+urutan: 1
+tampilkan: true
+ringkasan: >-
+  Website lama tidak bisa diubah tanpa menghubungi vendor, sehingga daftar produk
+  ketinggalan hampir setahun. Kami bangun ulang dengan katalog yang diurus
+  sendiri oleh tim internal.
+peran: ["Struktur & isi", "UI/UX design", "Pembangunan", "Pelatihan tim"]
+tumpukan: ["Next.js", "PostgreSQL", "Vercel"]
+hasil:
+  - angka: "3 hari → 10 menit"
+    label: "Waktu perbarui katalog"
+    catatan: "Dari kirim tiket ke vendor menjadi diubah sendiri"
+  - angka: "1,9 dtk"
+    label: "Muat halaman produk di 4G"
+    catatan: "Sebelumnya 7,4 detik"
+  - angka: "41"
+    label: "Permintaan penawaran / bulan"
+    catatan: "Rata-rata tiga bulan pertama setelah luncur"
+---
+
+## Konteks
+
+Perusahaan ini menjual ke apotek dan rumah sakit, bukan ke konsumen. Website-nya
+bukan etalase belanja — fungsinya membuat pembeli institusi percaya sebelum
+menelepon, dan memberi tim penjualan tautan yang bisa dikirim saat menawarkan.
+
+Masalahnya, setiap perubahan daftar produk harus lewat vendor lama. Biaya per
+perubahan membuat tim berhenti meminta. Saat kami mulai, katalog di website
+tertinggal 11 bulan dari katalog cetak.
+
+## Yang dikerjakan
+
+- Struktur ulang isi: dari 24 halaman jadi 9, dengan katalog sebagai basis data, bukan halaman terpisah
+- Katalog dengan penyaring kategori, bentuk sediaan, dan status ketersediaan
+- CMS untuk staf non-teknis, dengan hak akses terpisah
+- Formulir permintaan penawaran yang masuk ke email tim penjualan, lengkap dengan produk yang sedang dilihat
+- Sesi pelatihan 90 menit, direkam
+
+## Keputusan penting
+
+### Katalog dibuat sebagai basis data, bukan halaman
+
+Vendor sebelumnya membuat tiap produk jadi satu halaman manual. Menambah produk
+berarti menyalin halaman. Kami pindahkan ke basis data supaya penyaringan,
+pencarian, dan halaman kategori terbentuk sendiri. Menambah produk sekarang
+berarti mengisi satu formulir.
+
+### Formulir membawa konteks produk
+
+Sebelumnya permintaan penawaran datang tanpa keterangan produk, jadi tim
+penjualan harus membalas untuk bertanya. Kami sisipkan nama dan kode produk
+yang sedang dibuka ke isi email. Balasan pertama sekarang langsung berisi harga.
+
+### Tidak memakai sistem manajemen konten umum
+
+Klien meminta WordPress karena "semua orang pakai". Kami tolak: satu-satunya
+isi yang sering berubah adalah katalog, dan katalog butuh struktur ketat.
+Pilihan kami menghapus beban update plugin dan celah keamanan yang tidak
+akan ada yang urus.

@@ -1,0 +1,70 @@
+---
+judul: Sistem pengajuan pinjaman yang menggantikan tumpukan formulir
+klien: ""
+izinNama: false
+sektor: Koperasi simpan pinjam
+kota: Bandung
+tahun: 2025
+durasiMinggu: 14
+layanan: ["Aplikasi web"]
+urutan: 2
+tampilkan: true
+ringkasan: >-
+  Pengajuan pinjaman diproses dengan formulir kertas dan tiga berkas spreadsheet
+  yang sering berbeda isinya. Kami bangun satu alur pengajuan sampai pencairan
+  dengan jejak persetujuan.
+peran: ["Pemetaan alur kerja", "UI/UX design", "Pembangunan", "Migrasi data"]
+tumpukan: ["Next.js", "PostgreSQL", "Prisma", "VPS Jakarta"]
+hasil:
+  - angka: "6 hari → 1 hari"
+    label: "Pengajuan sampai keputusan"
+    catatan: "Median, diukur tiga bulan setelah dipakai penuh"
+  - angka: "0"
+    label: "Selisih data antar bagian"
+    catatan: "Sebelumnya tiga spreadsheet terpisah"
+  - angka: "1.400"
+    label: "Data anggota dimigrasi"
+    catatan: "Termasuk riwayat angsuran sejak 2019"
+---
+
+## Konteks
+
+Koperasi dengan sekitar 1.400 anggota. Pengajuan pinjaman ditulis di formulir
+kertas, disalin ke spreadsheet bagian kredit, lalu disalin lagi ke spreadsheet
+bagian keuangan saat cair. Setiap salinan adalah kesempatan salah ketik, dan
+saat angka tidak cocok tidak ada yang tahu versi mana yang benar.
+
+Pengurus tidak meminta aplikasi. Mereka meminta "spreadsheet yang tidak bisa
+diubah sembarangan". Setelah memetakan alur kerjanya, jelas bahwa yang mereka
+butuhkan adalah jejak persetujuan.
+
+## Yang dikerjakan
+
+- Pemetaan alur kerja bersama empat bagian, dua hari, sebelum desain dimulai
+- Alur pengajuan: input anggota, verifikasi, persetujuan berjenjang, pencairan
+- Peran pengguna terpisah dengan batas wewenang nominal
+- Jejak audit: siapa mengubah apa, kapan, dan nilai sebelumnya
+- Migrasi 1.400 data anggota beserta riwayat angsuran
+- Rekap bulanan yang bisa diunduh dalam bentuk spreadsheet
+
+## Keputusan penting
+
+### Alur kerja dipetakan sebelum satu layar didesain
+
+Dua hari pertama dihabiskan menggambar alur yang sedang berjalan di papan tulis,
+bukan alur yang seharusnya. Dari situ ketahuan ada satu langkah persetujuan yang
+sebenarnya tidak pernah dipakai sejak 2022. Langkah itu tidak dibangun. Sistem
+jadi lebih sederhana karena kami menolak menyalin proses lama apa adanya.
+
+### Rekap tetap bisa diunduh sebagai spreadsheet
+
+Bagian keuangan sudah punya cara kerja yang berjalan dengan spreadsheet, dan
+memaksa mereka pindah sepenuhnya akan membuat sistem ditinggalkan. Kami buat
+ekspor sebagai fitur kelas satu, bukan tambahan. Adopsi jadi mulus karena tidak
+ada yang kehilangan alat yang sudah dikuasai.
+
+### Ditaruh di server Jakarta, bukan layanan luar
+
+Data anggota koperasi termasuk data keuangan pribadi. Kami pilih server di
+Jakarta dengan pencadangan harian supaya lokasi datanya jelas dan bisa
+dipertanggungjawabkan ke pengurus dan anggota.
