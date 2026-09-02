@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nayba — draft 2
 
-## Getting Started
+Situs perusahaan Nayba. Next.js 16 (App Router, Turbopack) + Tailwind 4.
+Produksi: **https://nayba.id** (Vercel).
 
-First, run the development server:
+## Jalan lokal
 
 ```bash
+npm install
+cp .env.example .env.local   # lalu isi nilainya
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run build` menjalankan `npm run periksa` lebih dulu dan gagal kalau ada
+nilai kontak yang belum diisi. Itu disengaja — lihat bagian Pemeriksaan.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Semua nilai kontak dan analitik hidup di environment variable, bukan di kode.
+Daftar lengkap ada di [`.env.example`](.env.example).
 
-## Learn More
+| Variabel | Wajib | Isi |
+|---|---|---|
+| `NEXT_PUBLIC_WHATSAPP` | ya | Nomor WhatsApp bisnis, format `62…`, tanpa `+` dan spasi |
+| `NEXT_PUBLIC_EMAIL` | ya | Inbox tujuan formulir brief |
+| `NEXT_PUBLIC_WEB3FORMS_KEY` | ya | Access key Web3Forms yang terikat ke inbox di atas |
+| `NEXT_PUBLIC_SITE_URL` | tidak | Host kanonik tanpa garis miring akhir. Kosong = `https://nayba.id` |
+| `NEXT_PUBLIC_KOTA` | tidak | Kota basis kerja. Kosong = `Yogyakarta` |
+| `NEXT_PUBLIC_GA_ID` | tidak | GA4 measurement id, `G-XXXXXXXXXX` |
+| `NEXT_PUBLIC_GTM_ID` | tidak | GTM container id, `GTM-XXXXXXX` |
+| `NEXT_PUBLIC_INSTAGRAM` | tidak | URL profil, masuk ke JSON-LD `sameAs` |
+| `NEXT_PUBLIC_LINKEDIN` | tidak | URL profil, masuk ke JSON-LD `sameAs` |
+| `IZINKAN_CONTOH` | tidak | `1` = izinkan studi kasus contoh ikut terbit |
 
-To learn more about Next.js, take a look at the following resources:
+Dua hal yang gampang menggigit:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **`NEXT_PUBLIC_` dibekukan saat build.** Mengubah nilainya di Vercel tidak
+   berpengaruh apa pun sampai proyek di-redeploy. Ubah → Redeploy.
+2. **Nilainya terlihat publik** di HTML yang terkirim ke browser. Tidak masalah
+   untuk semua variabel di atas — nomor WhatsApp memang untuk dibaca orang, dan
+   access key Web3Forms memang dirancang publik serta terikat ke satu inbox.
+   Jangan pernah menaruh rahasia asli (kunci API berbayar, kredensial database)
+   dengan awalan `NEXT_PUBLIC_`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Mengisinya di Vercel
 
-## Deploy on Vercel
+Project → Settings → Environment Variables → tambah satu per satu, centang
+**Production**, **Preview**, dan **Development**. Setelah semua masuk:
+Deployments → deployment terakhir → ⋯ → **Redeploy**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Domain
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Domain utama di Vercel adalah apex `nayba.id`; `www.nayba.id` mengarah ke sana
+dengan 308. Itu harus tetap sejalan dengan `NEXT_PUBLIC_SITE_URL` (atau nilai
+bawaannya), karena sitemap, `robots.txt`, tag OpenGraph, dan JSON-LD semuanya
+dibangun dari satu nilai itu. Kalau host utama di Vercel diganti ke `www`,
+`NEXT_PUBLIC_SITE_URL` harus ikut diganti — kalau tidak, mesin pencari menerima
+dua alamat untuk halaman yang sama dan sinyalnya terbelah.
+
+## Analitik
+
+Dua lapis, karena keduanya menutupi kelemahan yang lain.
+
+**Vercel Web Analytics** — aktif otomatis lewat `<Analytics />` di
+`app/layout.tsx`. Tidak butuh kunci, tidak pakai cookie, jadi tidak perlu
+banner persetujuan. Aktifkan sekali di Vercel: Project → **Analytics** →
+*Enable*. Paket Hobby: 50.000 event/bulan gratis, tapi datanya hanya disimpan
+**1 bulan** dan tidak mendukung custom event atau parameter UTM.
+
+**Google Analytics 4** — untuk ingatan panjang (retensi 14 bulan) dan laporan
+yang lebih dalam. Tidak aktif sampai `NEXT_PUBLIC_GA_ID` diisi.
+
+Isi **salah satu** dari `NEXT_PUBLIC_GA_ID` atau `NEXT_PUBLIC_GTM_ID`, jangan
+keduanya — kalau GA4 dipasang langsung *dan* lewat container GTM, setiap
+kunjungan terhitung dua kali. `npm run periksa` menolak build kalau keduanya
+terisi.
+
+### Menyiapkan GA4 (`NEXT_PUBLIC_GA_ID`)
+
+Pakai ini kalau yang dibutuhkan hanya statistik kunjungan.
+
+1. Buka <https://analytics.google.com> → **Admin** → **Create** → **Property**.
+   Isi nama properti, zona waktu **(GMT+07:00) Jakarta**, mata uang **IDR**.
+2. Lanjut sampai **Data collection** → pilih platform **Web**.
+3. Isi Website URL `https://nayba.id`, beri nama stream, **Create stream**.
+4. Salin **Measurement ID** di kanan atas — bentuknya `G-XXXXXXXXXX`.
+5. Masukkan sebagai `NEXT_PUBLIC_GA_ID` di Vercel, lalu **Redeploy**.
+6. Cek di GA4 → **Reports** → **Realtime** sambil membuka situs. Kunjungan
+   harus muncul dalam hitungan detik.
+
+Laporan yang menjawab pertanyaan paling sering:
+
+- Total pengunjung → **Reports → Life cycle → Acquisition → Overview**
+- Halaman pertama yang dibuka → **Reports → Engagement → Landing page**
+- Halaman paling ramai → **Reports → Engagement → Pages and screens**
+- Asal trafik (Google, WhatsApp, Instagram) → **Acquisition → Traffic acquisition**
+
+### Menyiapkan GTM (`NEXT_PUBLIC_GTM_ID`)
+
+Pakai ini kalau nanti mau menambah Google Ads, Meta Pixel, atau tag lain tanpa
+menyentuh kode lagi.
+
+1. Buka <https://tagmanager.google.com> → **Create Account**. Target platform
+   **Web**, container URL `nayba.id`.
+2. Salin **Container ID** — bentuknya `GTM-XXXXXXX`.
+3. Masukkan sebagai `NEXT_PUBLIC_GTM_ID` di Vercel (dan **kosongkan**
+   `NEXT_PUBLIC_GA_ID`), lalu **Redeploy**.
+4. Di dalam GTM, tambah tag GA4: **Tags** → **New** → *Google Tag* → isi
+   Measurement ID `G-XXXXXXXXXX` → trigger **All Pages** → **Save** →
+   **Submit**.
+
+Catatan hukum: GA4 dan GTM menaruh cookie. Situs ini belum punya banner
+persetujuan. Untuk pengunjung Indonesia itu belum jadi kewajiban, tapi begitu
+ada trafik Uni Eropa yang serius, banner persetujuan wajib ditambahkan.
+
+## Pemeriksaan
+
+`npm run periksa` jalan otomatis sebelum `npm run build`. Tiga kelompok:
+
+1. **Data lead** — `NEXT_PUBLIC_WHATSAPP`, `NEXT_PUBLIC_EMAIL`, dan
+   `NEXT_PUBLIC_WEB3FORMS_KEY` harus terisi dan bukan nilai contoh. Tidak bisa
+   dilewati. Situs dengan tautan WhatsApp mati dan formulir yang ditolak
+   Web3Forms terlihat hidup tapi tidak menghasilkan apa pun — itu cara paling
+   mahal untuk rusak.
+2. **Studi kasus contoh** — `content/portofolio/contoh-*.mdx` memblokir build
+   kecuali `IZINKAN_CONTOH=1`. Saat ini flag itu **aktif di Vercel**, jadi empat
+   studi kasus contoh terbit dan terindeks. Hapus flag dan berkasnya begitu ada
+   pekerjaan asli.
+3. **Klaim terlarang** — tanpa `PT`/`CV`, alamat jalan, atau superlatif. Tidak
+   bisa dilewati.
+
+Sebelum perubahan ini, kelompok 1 dan 2 memakai flag yang sama. Menyalakan
+bypass portofolio ikut mematikan pemeriksaan kontak — itu sebabnya nomor
+WhatsApp contoh dan access key `GANTI-…` sempat tayang di produksi.
+
+## Aturan isi
+
+Nayba belum berbadan hukum dan belum punya kantor. Situs ini tidak boleh memuat
+awalan `PT`/`CV`, alamat jalan, jumlah karyawan, tahun berdiri, logo klien, atau
+testimoni. Nama klien hanya muncul kalau `izinNama: true` di frontmatter
+portofolio. Rinciannya di [`AGENTS.md`](AGENTS.md).

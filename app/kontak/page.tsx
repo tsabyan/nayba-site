@@ -8,23 +8,17 @@ import { studio } from "@/content/studio";
 export const metadata: Metadata = {
   title: "Kontak",
   description:
-    "Kirim brief, chat WhatsApp, atau jadwalkan 30 menit. Balasan dalam empat jam kerja.",
+    "Kirim brief atau chat WhatsApp. Balasan dalam empat jam kerja.",
 };
 
 /* The reference's contact page lists three offices. Nayba has none, so the
-   three cards carry the three ways of actually reaching us instead. */
+   cards carry the ways of actually reaching us instead. */
 const jalur = [
   {
     nama: "WhatsApp",
     ringkas: "Paling cepat. Cocok untuk pertanyaan pendek atau sekadar memastikan kami cocok.",
     aksi: "Buka WhatsApp",
     href: `https://wa.me/${studio.whatsapp}`,
-  },
-  {
-    nama: "Jadwalkan",
-    ringkas: "Panggilan video 30 menit untuk pekerjaan yang sudah punya bentuk. Tidak ada presentasi penjualan.",
-    aksi: "Pilih waktu",
-    href: studio.booking,
   },
   {
     nama: "Brief tertulis",
@@ -45,7 +39,7 @@ export default function HalamanKontak() {
 
       <section className="py-20 md:py-28">
         <Kontainer>
-          <dl className="grid gap-12 md:grid-cols-3 md:gap-10">
+          <dl className="grid gap-12 md:grid-cols-2 md:gap-10">
             {jalur.map((j, i) => (
               <Muncul key={j.nama} jenis="naik" urutan={i} durasi={1.2}>
                 <dt className="tampil text-anak">{j.nama}</dt>

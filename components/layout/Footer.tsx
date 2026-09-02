@@ -2,10 +2,7 @@ import Link from "next/link";
 import { studio } from "@/content/studio";
 import { Kontainer } from "./Kontainer";
 
-const sosial = [
-  { label: "WhatsApp", href: `https://wa.me/${studio.whatsapp}` },
-  { label: "Jadwalkan", href: studio.booking },
-];
+const sosial = [{ label: "WhatsApp", href: `https://wa.me/${studio.whatsapp}` }];
 
 /**
  * The reference fixes its footer and lets the page scroll over it, so the CTA

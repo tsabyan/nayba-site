@@ -87,13 +87,12 @@ export function BriefForm() {
 
   return (
     <form onSubmit={tangani} className="max-w-2xl">
-      {process.env.NODE_ENV !== "production" &&
-        studio.formKey.startsWith("GANTI") && (
-          <p className="mb-10 border-2 border-garis bg-kabu p-5 text-sm">
-            Formulir belum terhubung: isi <code>formKey</code> di{" "}
-            <code>content/studio.ts</code> dengan access key Web3Forms.
-          </p>
-        )}
+      {process.env.NODE_ENV !== "production" && !studio.formKey && (
+        <p className="mb-10 border-2 border-garis bg-kabu p-5 text-sm">
+          Formulir belum terhubung: isi <code>NEXT_PUBLIC_WEB3FORMS_KEY</code> di{" "}
+          <code>.env.local</code>. Lihat <code>.env.example</code>.
+        </p>
+      )}
 
       {/* Honeypot. Hidden from people, irresistible to bots. */}
       <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">

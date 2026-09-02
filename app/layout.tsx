@@ -5,6 +5,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Gerak } from "@/components/Gerak";
 import { AtasCepat } from "@/components/AtasCepat";
 import { DataTerstruktur } from "@/components/DataTerstruktur";
+import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { studio } from "@/content/studio";
 import "./globals.css";
 
@@ -67,6 +69,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AtasCepat />
         <Gerak />
         <DataTerstruktur />
+
+        {/* Vercel Web Analytics: no cookies, no consent banner, but the Hobby
+            plan only keeps one month. Google is the long memory — set one of
+            the two ids, not both, or every pageview is counted twice. */}
+        <Analytics />
+        {studio.analitik.ga && <GoogleAnalytics gaId={studio.analitik.ga} />}
+        {studio.analitik.gtm && <GoogleTagManager gtmId={studio.analitik.gtm} />}
       </body>
     </html>
   );
