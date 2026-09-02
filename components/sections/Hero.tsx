@@ -11,8 +11,13 @@ export function Hero() {
     <section className="flex min-h-[calc(100svh-5rem)] flex-col justify-center py-6 md:py-10">
       <Kontainer>
         {/* Two columns from the top, so the panel sits beside the headline
-            rather than below it — otherwise the upper right is a dead void. */}
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+            rather than below it — otherwise the upper right is a dead void.
+            Splits at `md` rather than `lg`: a tablet is wide enough to hold
+            both, and stacking there left the headline oversized above a panel
+            that had fallen out of the composition. The tablet column is
+            narrower than the desktop one, which is what the tighter headline
+            clamp below is for. */}
+        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] md:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
           <div>
             <Muncul jenis="pudar" durasi={1.4}>
               <p className="mata text-biru">Studio web · {studio.kota}</p>
@@ -57,7 +62,7 @@ export function Hero() {
           </div>
 
           <Muncul jenis="kanan" urutan={2} durasi={1.4}>
-            <Plat rasio="4 / 5" nada="biru" className="mx-auto max-h-[62svh] w-auto">
+            <Plat rasio="4 / 5" rasioDari="lg" nada="biru" className="mx-auto w-auto lg:max-h-[62svh]">
               <p className="mata text-putih/80">Yang kami pegang</p>
 
               <dl className="space-y-7">

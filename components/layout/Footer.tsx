@@ -1,24 +1,29 @@
 import Link from "next/link";
 import { studio } from "@/content/studio";
+import { pesanWA, tautanWA } from "@/lib/wa";
 import { Kontainer } from "./Kontainer";
 
-const sosial = [{ label: "WhatsApp", href: `https://wa.me/${studio.whatsapp}` }];
+const sosial = [{ label: "WhatsApp", href: tautanWA(pesanWA.umum) }];
 
 /**
  * The reference fixes its footer and lets the page scroll over it, so the CTA
  * is uncovered rather than scrolled to. `.kaki-terungkap` does the pinning, and
  * only above `md` — see globals.css.
+ *
+ * Centred below `md`. Left-aligned works on desktop because the CTA sits in a
+ * wide measure with the copyright pushed to the far right; on a phone that
+ * collapses to a narrow ragged column with everything hugging one edge.
  */
 export function Footer() {
   return (
     <footer className="kaki-terungkap flex items-center bg-biru text-putih">
-      <Kontainer className="py-16">
+      <Kontainer className="py-16 max-md:text-center">
         <p className="mata text-putih/70">Punya proyek?</p>
 
         <p className="tampil mt-6 text-ajakan text-putih">
           Atau sapa kami di{" "}
           <a
-            href={`https://wa.me/${studio.whatsapp}`}
+            href={tautanWA(pesanWA.umum)}
             target="_blank"
             rel="noopener noreferrer"
             className="pelan underline decoration-2 underline-offset-[0.12em] hover:text-tinta"
@@ -27,7 +32,7 @@ export function Footer() {
           </a>
         </p>
 
-        <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-putih/25 pt-8">
+        <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-putih/25 pt-8 max-md:justify-center">
           {sosial.map((s) => (
             <a
               key={s.label}
@@ -46,7 +51,9 @@ export function Footer() {
             Kirim brief
           </Link>
 
-          <p className="ml-auto text-sm text-putih/70">
+          {/* `ml-auto` is what pushes this to the far right on desktop, so it
+              has to be dropped for the centred stack to actually centre. */}
+          <p className="text-sm text-putih/70 md:ml-auto max-md:w-full">
             © {new Date().getFullYear()} {studio.nama} · {studio.kota}, Indonesia
           </p>
         </div>

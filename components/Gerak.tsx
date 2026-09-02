@@ -35,22 +35,32 @@ export function Gerak() {
 
     const jepit = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 
-    /** Writes --maju for every scroll-linked element. Runs every scroll event. */
+    /**
+     * Writes --maju for every scroll-linked element. Runs every scroll event.
+     *
+     * Measured first, written second, rather than one element at a time. Each
+     * --maju write invalidates style for a section that paints from it, so an
+     * interleaved loop makes the next getBoundingClientRect force a fresh
+     * layout — the read/write thrash pattern. Two passes cost one layout per
+     * event no matter how many elements are tracked.
+     */
     const hitung = () => {
       const tinggi = window.innerHeight;
 
-      for (const el of terikat) {
+      const nilai = terikat.map((el) => {
         const r = el.getBoundingClientRect();
-        const maju =
-          el.dataset.maju === "lewat"
-            ? // Full pass: 0 as the element enters, 1 as it leaves. For section
-              // backgrounds, which must finish morphing only once fully past.
-              jepit((tinggi - r.top) / (tinggi + r.height))
-            : // Reference default (`data-top`): finishes when the element's top
-              // reaches the top of the viewport.
-              jepit((tinggi - r.top) / tinggi);
-        el.style.setProperty("--maju", maju.toFixed(4));
-      }
+        return el.dataset.maju === "lewat"
+          ? // Full pass: 0 as the element enters, 1 as it leaves. For section
+            // backgrounds, which must finish morphing only once fully past.
+            jepit((tinggi - r.top) / (tinggi + r.height))
+          : // Reference default (`data-top`): finishes when the element's top
+            // reaches the top of the viewport.
+            jepit((tinggi - r.top) / tinggi);
+      });
+
+      terikat.forEach((el, i) => {
+        el.style.setProperty("--maju", nilai[i].toFixed(4));
+      });
 
       if (naik) naik.dataset.naik = window.scrollY > 600 ? "tampil" : "sembunyi";
     };

@@ -5,6 +5,7 @@ import { Isian, kelasKontrol, kelasPilih } from "@/components/ui/Isian";
 import { TombolAksi } from "@/components/ui/Tombol";
 import { studio } from "@/content/studio";
 import { kirimBrief, type Brief } from "@/lib/kirim";
+import { pesanWA, tautanWA } from "@/lib/wa";
 
 /** Adjust these to the bracket you actually work in. */
 const anggaran = [
@@ -72,7 +73,7 @@ export function BriefForm() {
           Kami balas dalam empat jam kerja. Kalau butuh lebih cepat, kirim pesan
           ke{" "}
           <a
-            href={`https://wa.me/${studio.whatsapp}`}
+            href={tautanWA(pesanWA.setelahBrief)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-biru underline underline-offset-4"

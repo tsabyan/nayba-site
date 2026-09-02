@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /**
  * A designed panel that stands in for photography.
@@ -15,12 +15,21 @@ import type { ReactNode } from "react";
 export function Plat({
   children,
   rasio = "16 / 10",
+  rasioDari = "md",
   nada = "biru",
   skala = false,
   className = "",
 }: {
   children: ReactNode;
   rasio?: string;
+  /**
+   * Breakpoint from which the ratio governs the height. Below it, content does.
+   *
+   * A ratio only holds its shape while the column is wide enough for the text
+   * inside it. The hero panel sits in the narrower of two tablet columns, where
+   * 4/5 resolves to 356px against 440px of facts — so it asks for `lg`.
+   */
+  rasioDari?: "md" | "lg";
   nada?: "biru" | "gelap" | "terang";
   /** Attach the scroll-linked scale to the panel's surface. */
   skala?: boolean;
@@ -32,10 +41,18 @@ export function Plat({
     terang: "bg-kabu text-tinta",
   }[nada];
 
+  /* Both arms are written out in full because Tailwind reads source text, not
+     runtime values — a composed class name would emit neither. The floor only
+     stops a sparse panel from collapsing once the ratio is off. */
+  const kelasRasio = {
+    md: "max-md:min-h-72 md:aspect-[var(--rasio)]",
+    lg: "max-lg:min-h-72 lg:aspect-[var(--rasio)]",
+  }[rasioDari];
+
   return (
     <div
-      style={{ aspectRatio: rasio }}
-      className={`relative overflow-hidden ${warna} ${className}`}
+      style={{ "--rasio": rasio } as CSSProperties}
+      className={`relative overflow-hidden ${kelasRasio} ${warna} ${className}`}
     >
       <div
         aria-hidden

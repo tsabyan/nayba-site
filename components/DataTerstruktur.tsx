@@ -26,10 +26,21 @@ export function DataTerstruktur() {
     },
   };
 
+  /* Every value here comes from our own config, so this is defence in depth
+     rather than a live hole — but a JSON string is allowed to contain the
+     characters that end a script element, and if one ever did (a stray
+     `</script>` in an env var) the rest of the document would be parsed as
+     markup. Escaping the three characters that can start a tag or a comment
+     costs nothing and removes the class of bug. */
+  const json = JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: json }}
     />
   );
 }

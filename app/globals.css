@@ -188,6 +188,48 @@
   transition-timing-function: cubic-bezier(0.22, 1.5, 0.36, 1);
 }
 
+/* ---------------------------------------------------------------------------
+   Mobile menu
+   ---------------------------------------------------------------------------
+   The panel travels first; its links then populate one after another, so the
+   eye follows the movement into the list rather than being handed five items
+   at once. Both stay mounted and are driven by `[data-buka]` on the wrapper,
+   which is what lets the exit animate too — a panel that vanishes on close
+   reads as a bug next to one that slid in.
+--------------------------------------------------------------------------- */
+.tirai {
+  transform: translateX(100%);
+  transition: transform 0.55s cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+.tirai-latar {
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+.tirai-item {
+  opacity: 0;
+  transform: translateX(28px);
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 0.84, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+[data-buka="true"] .tirai,
+[data-buka="true"] .tirai-item {
+  transform: none;
+}
+
+[data-buka="true"] .tirai-latar,
+[data-buka="true"] .tirai-item {
+  opacity: 1;
+}
+
+/* Waits out the panel's travel, then steps through the links. */
+[data-buka="true"] .tirai-item {
+  transition-delay: calc(180ms + var(--urut, 0) * 70ms);
+}
+
 /* Scroll-linked. Each section writes its own --maju.
    Morphs 46% → 15% rather than the reference's bright start: white body copy
    on hsl(219 90% 56%) is only 4.45:1, which fails AA at normal sizes. Starting
@@ -218,6 +260,12 @@
     transition: none;
   }
 
+  .tirai,
+  .tirai-latar,
+  .tirai-item {
+    transition: none;
+  }
+
   /* Pin every scroll-linked property to its resolved end state. */
   .morf,
   .lacak,
@@ -245,6 +293,18 @@
      cards. One value governs both: if they drift apart, a covered card either
      hides its own title or leaves a dead gap. */
   --strip-karya: 4.75rem;
+}
+
+/* Below `md` the wrapper has no job — the footer is in normal flow. Leaving it
+   as a box makes it the sticky containing block for the header, and a sticky
+   element cannot outlive its container: at the bottom of a short page the
+   wrapper ends above the footer, so the header was pushed off the top of the
+   screen by however much it overflowed. `display: contents` removes the box and
+   hands the header back to <body>. */
+@media (max-width: 767px) {
+  .badan-gulir {
+    display: contents;
+  }
 }
 
 @media (min-width: 768px) {

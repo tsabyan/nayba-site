@@ -33,6 +33,10 @@ export const metadata: Metadata = {
     template: `%s — ${studio.nama}`,
   },
   description: studio.deskripsi,
+  /* Relative, so each page resolves its own against metadataBase. Without this
+     Next emits no canonical at all, which left the www host — which 308s to the
+     apex — free to be indexed as a separate page. */
+  alternates: { canonical: "./" },
   openGraph: {
     type: "website",
     locale: "id_ID",

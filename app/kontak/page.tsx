@@ -3,7 +3,7 @@ import { Panji } from "@/components/layout/Panji";
 import { Kontainer } from "@/components/layout/Kontainer";
 import { Muncul } from "@/components/ui/Muncul";
 import { BriefForm } from "@/components/BriefForm";
-import { studio } from "@/content/studio";
+import { pesanWA, tautanWA } from "@/lib/wa";
 
 export const metadata: Metadata = {
   title: "Kontak",
@@ -18,7 +18,7 @@ const jalur = [
     nama: "WhatsApp",
     ringkas: "Paling cepat. Cocok untuk pertanyaan pendek atau sekadar memastikan kami cocok.",
     aksi: "Buka WhatsApp",
-    href: `https://wa.me/${studio.whatsapp}`,
+    href: tautanWA(pesanWA.kontak),
   },
   {
     nama: "Brief tertulis",
