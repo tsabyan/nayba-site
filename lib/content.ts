@@ -4,6 +4,15 @@ import matter from "gray-matter";
 
 const DIR = path.join(process.cwd(), "content", "portofolio");
 
+/**
+ * One measured result.
+ *
+ * `catatan` renders on the case study page and NOWHERE else — the homepage card
+ * and the fallback panel print `angka` and `label` alone. So anything that needs
+ * its qualifier to be honest ("perkiraan", "menurut tim mereka") must not sit
+ * first in the list, because first is what the card shows, stripped of it.
+ * Lead with figures that are true unqualified.
+ */
 export type Hasil = { angka: string; label: string; catatan?: string };
 
 export type Karya = {

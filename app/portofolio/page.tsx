@@ -37,7 +37,7 @@ export default function HalamanPortofolio() {
         <Panji
           mata="Portofolio"
           judul="Pekerjaan yang sudah selesai"
-          ringkas="Setiap halaman berisi konteks masalahnya, keputusan yang kami ambil beserta alasannya, dan hasil yang bisa diukur. Sebagian klien tidak bisa disebut namanya, jadi kami tulis sektornya."
+          ringkas="Setiap halaman berisi konteks masalahnya, keputusan yang kami ambil beserta alasannya, dan hasil apa adanya. Klien yang belum mengizinkan namanya kami tulis sektornya, dan yang bukan pekerjaan berbayar kami sebut apa adanya."
         />
       )}
 
