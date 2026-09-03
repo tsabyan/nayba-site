@@ -135,15 +135,22 @@ yang justru ingin ditunjukkan.
 
 Angka itu 2× dari ukuran render sebenarnya pada layar 1920px (547 × 376 dan
 1905 × 760), karena isinya tangkapan layar — teks di dalamnya butuh kerapatan
-piksel. Taruh berkasnya di `public/karya/`, lalu tulis jalurnya di frontmatter:
+piksel. Taruh berkasnya di `public/images/mockup/`, lalu tulis jalurnya di
+frontmatter:
 
 ```yaml
-gambarUtama: /karya/nama-proyek-kartu.webp
-gambarLebar: /karya/nama-proyek-spanduk.webp
+gambarUtama: /images/mockup/nama-proyek-kartu.png
+gambarLebar: /images/mockup/nama-proyek-spanduk.png
 ```
 
-PNG atau WebP sama saja — Next mengubahnya ke AVIF/WebP saat disajikan. Tanpa
-gambar, slotnya memakai panel fakta proyek itu sendiri dan tetap rapi.
+Nama berkas harus ASCII. Tanda kali Unicode (`×`) yang ikut tersalin dari
+ukuran gambar terlihat sama dengan huruf `x` tapi harus dikodekan di URL, dan
+perilakunya berbeda antar sistem berkas dan CDN.
+
+PNG atau WebP sama saja sebagai sumber — Next mengubahnya ke AVIF/WebP saat
+disajikan, dan PNG 1,5 MB keluar sekitar 48 kB pada lebar 1200px. Yang penting
+resolusinya, bukan ukuran berkasnya. Tanpa gambar, slotnya memakai panel fakta
+proyek itu sendiri dan tetap rapi.
 
 Kalau data di layar tidak boleh terlihat, ganti isinya dengan data contoh yang
 masuk akal, jangan diburamkan. Buram terbaca sebagai ada yang disembunyikan.

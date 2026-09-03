@@ -104,6 +104,11 @@ export default function HalamanPortofolio() {
                       {k.judul}
                     </h2>
                     <p className="mt-4 max-w-lg text-sm">{k.ringkasan}</p>
+                    {k.tumpukan.length > 0 && (
+                      <p className="mt-4 text-sm text-abu">
+                        {k.tumpukan.join(" · ")}
+                      </p>
+                    )}
                   </Link>
                 </Muncul>
               ))}

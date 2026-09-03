@@ -39,6 +39,16 @@ export function KartuKarya({ karya, urutan }: { karya: Karya; urutan: number }) 
             </p>
           )}
 
+          {/* The stack sits on the project rather than in a wall of its own.
+              A list of logos says what we have touched; the same names under a
+              project say what we chose for that problem, which is the question
+              a client is actually asking. */}
+          {karya.tumpukan.length > 0 && (
+            <p className="mt-8 border-t border-garis pt-5 text-sm text-abu">
+              {karya.tumpukan.join(" · ")}
+            </p>
+          )}
+
           <p className="mata pelan mt-8 inline-flex items-center gap-3 text-biru group-hover:gap-5">
             Baca ceritanya <span aria-hidden>→</span>
           </p>
