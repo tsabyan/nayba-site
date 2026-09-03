@@ -27,8 +27,16 @@
      rather than 170px, which is what clears with three stacked lines plus the
      supporting copy and buttons. Measured at 640/720/900 against the RESTING
      layout: measuring before the entrance reveal adds a phantom 60px from the
-     buttons' translateY and makes the hero look like it overflows. */
-  --text-raksasa: clamp(2.5rem, min(10.5vw, 12.5vh), 10.625rem);
+     buttons' translateY and makes the hero look like it overflows.
+
+     The vw term is 19.5 rather than 10.5 because only phones ever read it: by
+     768px the vh term is already lower and takes over, so laptops and desktops
+     resolve exactly as before. At 390px it gives 76px, where "Website" sets to
+     206px inside a 342px measure — the widest line reaching about 70% of the
+     column, which is the proportion the display face was drawn for. 10.5vw put
+     it at 41px, barely above the floor and small enough to read as body copy.
+     Ink-width measured, not estimated: 3.11px per px of font size. */
+  --text-raksasa: clamp(3rem, min(19.5vw, 12.5vh), 10.625rem);
   --text-raksasa--line-height: 0.86;
   --text-panji: clamp(2.75rem, 8vw, 7.2rem);
   --text-panji--line-height: 0.92;
