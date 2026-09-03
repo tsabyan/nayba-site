@@ -1,0 +1,63 @@
+---
+judul: Arsip dinas yang bisa dicari, bukan ditumpuk
+klien: Dinas Pertanian Sampang
+izinNama: true
+sektor: Pemerintahan daerah
+kota: Sampang, Jawa Timur
+tahun: 2025
+durasiMinggu: 8
+layanan: ["Aplikasi web"]
+urutan: 1
+tampilkan: true
+ringkasan: >-
+  Dokumen dinas hanya ada dalam bentuk fisik: rentan rusak dimakan usia, dan
+  sulit ditemukan saat dibutuhkan. Kami bangun sistem arsip digital tempat hasil
+  pindai disimpan rapi, dicari, dan disaring.
+peran:
+  ["Discovery", "UI/UX design", "Pembangunan", "Migrasi data", "Buku panduan"]
+tumpukan: ["Laravel", "Tailwind CSS", "MySQL"]
+hasil:
+  - angka: "8 minggu"
+    label: "Discovery sampai serah terima"
+    catatan: "Termasuk migrasi arsip dan buku panduan"
+---
+
+## Konteks
+
+Dokumen dinas disimpan sebagaimana dokumen dinas biasanya disimpan: dalam bentuk
+fisik, di lemari, diurutkan menurut cara yang dipahami orang yang menaruhnya.
+
+Cara itu punya dua masalah yang saling menguatkan. Yang pertama soal waktu —
+kertas menua, dan arsip yang jarang disentuh tidak ketahuan rusaknya sampai ada
+yang mencarinya. Yang kedua soal pencarian: satu dokumen hanya bisa ditemukan
+kalau ada yang ingat di mana ia diletakkan. Semakin lama arsipnya menumpuk,
+semakin sedikit orang yang ingat.
+
+Keduanya bertemu di titik yang sama. Dokumen yang sulit dicari jadi jarang
+dibuka, dan dokumen yang jarang dibuka adalah dokumen yang kerusakannya baru
+ketahuan ketika sudah terlambat.
+
+## Yang dikerjakan
+
+- Discovery: memetakan jenis dokumen yang diarsipkan dan bagaimana selama ini
+  dicari kembali
+- Sistem arsip digital untuk menyimpan hasil pindai beserta keterangannya
+- Pencarian dan penyaringan, supaya dokumen ditemukan lewat isinya, bukan lewat
+  ingatan siapa yang terakhir memegangnya
+- Migrasi arsip yang sudah ada ke dalam sistem
+- Buku panduan penggunaan
+
+## Keputusan penting
+
+### Buku panduan dihitung sebagai bagian pekerjaan, bukan lampiran
+
+Sistem internal di lingkungan kerja yang stafnya berganti akan ditinggalkan
+kalau cara memakainya hanya ada di kepala orang yang kebetulan ikut pelatihan.
+Buku panduan dikerjakan sebagai bagian dari lingkup, bukan sebagai berkas yang
+dikirim belakangan setelah serah terima.
+
+### Pencarian dirancang untuk orang yang tidak tahu harus mencari apa
+
+Arsip fisik menuntut penggunanya tahu lebih dulu dokumen mana yang ia butuhkan.
+Penyaringan dibuat supaya pencarian bisa dimulai dari yang samar — periode,
+jenis dokumen — lalu dipersempit, bukan hanya dari kata kunci yang tepat.

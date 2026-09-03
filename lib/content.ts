@@ -42,9 +42,15 @@ export type Karya = {
  *
  * Gating the name at the data layer rather than remembering to redact it in
  * each template means an NDA cannot be broken by forgetting.
+ *
+ * A missing city is a real case, not an oversight — an online-only seller has
+ * no city worth publishing. Joining blindly rendered "ecommerce, -", which
+ * reads as a template that failed rather than as a client kept anonymous.
  */
 export function namaKlien(k: Karya): string {
-  return k.izinNama ? k.klien : `${k.sektor}, ${k.kota}`;
+  if (k.izinNama && k.klien) return k.klien;
+  const kota = k.kota && k.kota !== "-" ? k.kota : "";
+  return [k.sektor, kota].filter(Boolean).join(", ");
 }
 
 function baca(berkas: string): Karya {

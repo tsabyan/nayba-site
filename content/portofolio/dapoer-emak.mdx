@@ -1,0 +1,69 @@
+---
+judul: Toko bahan masakan yang checkout-nya berakhir di WhatsApp
+klien: ""
+izinNama: false
+sektor: Toko bahan pangan daring
+kota: "-"
+tahun: 2023
+durasiMinggu: 10
+layanan: ["Aplikasi web"]
+urutan: 2
+tampilkan: true
+ringkasan: >-
+  Penjualan bahan masakan, sayur, dan buah berjalan lewat percakapan: daftar
+  belanja diketik ulang, total dihitung manual. Kami bangun katalog dengan
+  keranjang yang merangkum pesanan jadi satu pesan siap kirim, dan CRM untuk
+  mengurus produk, voucher, dan status pesanan.
+peran: ["Discovery", "UI/UX design", "Pembangunan", "Migrasi data", "Pelatihan"]
+tumpukan: ["Laravel", "MySQL", "JavaScript", "CSS"]
+hasil:
+  - angka: "10 minggu"
+    label: "Discovery sampai luncur"
+    catatan: "Katalog, keranjang, checkout, dan CRM"
+---
+
+## Konteks
+
+Berjualan bahan masakan lewat percakapan berarti setiap pesanan disusun dari
+awal. Pembeli menanyakan apa yang tersedia, penjual menyebutkan, pembeli memilih,
+lalu seseorang mengetik ulang daftarnya dan menjumlahkan harganya.
+
+Setiap langkah itu tempat kesalahan bisa masuk: barang yang sudah habis masih
+ditawarkan, harga yang sudah naik masih dipakai, satu item terlewat saat daftar
+diketik ulang. Dan pekerjaan itu berulang untuk setiap pembeli, tanpa ada
+bagian yang bisa dipakai lagi besok.
+
+## Yang dikerjakan
+
+- Katalog produk — bahan masakan, sayur, buah — dengan harga dan ketersediaan
+  yang diurus dari satu tempat
+- Keranjang dan checkout yang merangkum pesanan beserta totalnya
+- CRM untuk mengelola produk, voucher, dan status pesanan
+- Migrasi data produk yang sudah ada
+- Pelatihan penggunaan untuk pengelola
+
+## Keputusan penting
+
+### Checkout berakhir di WhatsApp, bukan di gerbang pembayaran
+
+Alur pemesanan sengaja tidak diakhiri dengan pembayaran daring. Checkout
+menyusun daftar belanja beserta totalnya menjadi satu pesan yang tinggal dikirim
+ke admin lewat WhatsApp.
+
+Gerbang pembayaran menuntut hal-hal yang tidak sepadan untuk penjual sekecil
+ini: pendaftaran merchant, potongan per transaksi, dan penyelesaian sengketa
+yang harus ditangani sendiri. Sementara percakapan justru bagian yang sudah
+berjalan — pembeli sudah terbiasa memesan lewat WhatsApp, dan penjual sudah ada
+di sana sepanjang hari.
+
+Yang diperbaiki bukan salurannya, tapi apa yang mengalir di dalamnya: pesan yang
+masuk sekarang sudah rapi, lengkap, dan totalnya sudah benar sebelum percakapan
+dimulai.
+
+### Voucher dan status pesanan masuk ke CRM sejak awal
+
+Keduanya biasanya ditunda sampai "nanti kalau sudah ramai". Tapi voucher yang
+dicatat di luar sistem berarti diskon tidak pernah bisa dicocokkan dengan
+penjualan, dan status pesanan yang hanya ada di kepala pengelola berarti tidak
+ada yang bisa menjawab "pesanan saya sudah dikirim belum?" selain orang itu
+sendiri.
