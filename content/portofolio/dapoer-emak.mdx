@@ -2,7 +2,7 @@
 judul: Bahan masakan yang tidak perlu dijemput ke pasar
 klien: ""
 izinNama: false
-sektor: Proyek kuliah
+sektor: Toko bahan pangan daring
 kota: "-"
 tahun: 2023
 durasiMinggu: 10
@@ -10,10 +10,10 @@ layanan: ["Aplikasi web"]
 urutan: 2
 tampilkan: true
 ringkasan: >-
-  Proyek kuliah, bukan pekerjaan berbayar. Untuk membeli bahan masakan, sayur,
-  dan buah, pembeli harus datang sendiri ke pasar. Kami bangun katalog dengan
-  keranjang dan checkout yang merangkum pesanan jadi satu pesan siap kirim,
-  beserta CRM untuk mengurus produk, voucher, dan status pesanan.
+  Untuk membeli bahan masakan, sayur, dan buah, pembeli harus datang sendiri ke
+  pasar. Kami bangun katalog dengan keranjang dan checkout yang merangkum
+  pesanan jadi satu pesan siap kirim, beserta CRM untuk mengurus produk,
+  voucher, dan status pesanan.
 peran:
   ["Discovery", "UI/UX design", "Pembangunan", "Pelatihan unggah produk"]
 tumpukan: ["Laravel", "MySQL", "JavaScript", "CSS"]
@@ -25,10 +25,11 @@ hasil:
 
 ## Konteks
 
-Aplikasi ini dibangun sebagai proyek kuliah, atas permintaan sekelompok
-mahasiswa, dan tidak pernah menjadi pekerjaan berbayar. Kami mencantumkannya
-karena kodenya kami tulis sendiri dari nol dan keputusan rancangannya kami ambil
-sendiri — bukan karena ada klien yang membayarnya.
+Kliennya sekelompok mahasiswa yang sedang menjalankan ide usaha sendiri. Itu
+menentukan hampir setiap keputusan teknis di bawah: anggarannya kecil, belum ada
+badan usaha yang bisa didaftarkan ke mana-mana, dan yang dibutuhkan adalah
+sesuatu yang bisa mulai berjualan minggu depan, bukan yang siap menampung
+sepuluh ribu pesanan sehari.
 
 Bahan masakan dibeli dengan cara mendatanginya. Sayur, buah, bumbu — semuanya
 menuntut perjalanan ke pasar, di jam ketika pasar masih punya barang yang layak,
@@ -58,11 +59,12 @@ Alur pemesanan sengaja tidak diakhiri dengan pembayaran daring. Checkout
 menyusun daftar belanja beserta totalnya menjadi satu pesan yang tinggal dikirim
 ke admin lewat WhatsApp.
 
-Gerbang pembayaran menuntut hal-hal yang tidak sepadan untuk penjual sekecil
-ini: pendaftaran merchant, potongan per transaksi, dan penyelesaian sengketa
-yang harus ditangani sendiri. Sementara percakapan adalah bagian yang sudah
-berjalan — pembeli sudah terbiasa memesan lewat WhatsApp, dan penjual sudah ada
-di sana sepanjang hari.
+Gerbang pembayaran menuntut hal-hal yang belum dimiliki usaha yang baru mau
+mulai: badan usaha untuk didaftarkan sebagai merchant, potongan per transaksi
+yang menggerus margin bahan pangan, dan penyelesaian sengketa yang harus
+ditangani sendiri. Sementara percakapan adalah bagian yang sudah berjalan —
+pembeli sudah terbiasa memesan lewat WhatsApp, dan penjual sudah ada di sana
+sepanjang hari.
 
 Bahan pangan juga barang yang sering perlu dibicarakan sebelum dibayar: stok
 habis, ukuran diganti, jumlah dibulatkan. Menutup pesanan dengan pembayaran
