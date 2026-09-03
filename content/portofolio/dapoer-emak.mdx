@@ -1,5 +1,5 @@
 ---
-judul: Toko bahan masakan yang checkout-nya berakhir di WhatsApp
+judul: Bahan masakan yang tidak perlu dijemput ke pasar
 klien: ""
 izinNama: false
 sektor: Toko bahan pangan daring
@@ -10,11 +10,11 @@ layanan: ["Aplikasi web"]
 urutan: 2
 tampilkan: true
 ringkasan: >-
-  Penjualan bahan masakan, sayur, dan buah berjalan lewat percakapan: daftar
-  belanja diketik ulang, total dihitung manual. Kami bangun katalog dengan
-  keranjang yang merangkum pesanan jadi satu pesan siap kirim, dan CRM untuk
-  mengurus produk, voucher, dan status pesanan.
-peran: ["Discovery", "UI/UX design", "Pembangunan", "Migrasi data", "Pelatihan"]
+  Untuk membeli bahan masakan, sayur, dan buah, pembeli harus datang sendiri ke
+  pasar. Kami bangun katalog dengan keranjang dan checkout yang merangkum
+  pesanan jadi satu pesan siap kirim, beserta CRM untuk mengurus produk,
+  voucher, dan status pesanan.
+peran: ["Discovery", "UI/UX design", "Pembangunan"]
 tumpukan: ["Laravel", "MySQL", "JavaScript", "CSS"]
 hasil:
   - angka: "10 minggu"
@@ -24,14 +24,17 @@ hasil:
 
 ## Konteks
 
-Berjualan bahan masakan lewat percakapan berarti setiap pesanan disusun dari
-awal. Pembeli menanyakan apa yang tersedia, penjual menyebutkan, pembeli memilih,
-lalu seseorang mengetik ulang daftarnya dan menjumlahkan harganya.
+Bahan masakan dibeli dengan cara mendatanginya. Sayur, buah, bumbu — semuanya
+menuntut perjalanan ke pasar, di jam ketika pasar masih punya barang yang layak,
+oleh orang yang bisa menilai mana yang layak.
 
-Setiap langkah itu tempat kesalahan bisa masuk: barang yang sudah habis masih
-ditawarkan, harga yang sudah naik masih dipakai, satu item terlewat saat daftar
-diketik ulang. Dan pekerjaan itu berulang untuk setiap pembeli, tanpa ada
-bagian yang bisa dipakai lagi besok.
+Itu bukan proses yang rusak. Itu proses yang berjalan selama puluhan tahun, dan
+untuk sebagian orang masih cara terbaik. Yang berubah adalah siapa yang bisa
+menjalaninya: pembeli yang jam kerjanya bentrok dengan jam pasar, atau yang
+tidak punya cara mengangkut belanjaan, tidak punya jalan masuk sama sekali.
+
+Kategori itulah yang dilayani aplikasi ini — bukan menggantikan pasar, tapi
+memberi pintu kedua bagi yang tidak bisa lewat pintu pertama.
 
 ## Yang dikerjakan
 
@@ -39,8 +42,6 @@ bagian yang bisa dipakai lagi besok.
   yang diurus dari satu tempat
 - Keranjang dan checkout yang merangkum pesanan beserta totalnya
 - CRM untuk mengelola produk, voucher, dan status pesanan
-- Migrasi data produk yang sudah ada
-- Pelatihan penggunaan untuk pengelola
 
 ## Keputusan penting
 
@@ -52,13 +53,14 @@ ke admin lewat WhatsApp.
 
 Gerbang pembayaran menuntut hal-hal yang tidak sepadan untuk penjual sekecil
 ini: pendaftaran merchant, potongan per transaksi, dan penyelesaian sengketa
-yang harus ditangani sendiri. Sementara percakapan justru bagian yang sudah
+yang harus ditangani sendiri. Sementara percakapan adalah bagian yang sudah
 berjalan — pembeli sudah terbiasa memesan lewat WhatsApp, dan penjual sudah ada
 di sana sepanjang hari.
 
-Yang diperbaiki bukan salurannya, tapi apa yang mengalir di dalamnya: pesan yang
-masuk sekarang sudah rapi, lengkap, dan totalnya sudah benar sebelum percakapan
-dimulai.
+Bahan pangan juga barang yang sering perlu dibicarakan sebelum dibayar: stok
+habis, ukuran diganti, jumlah dibulatkan. Menutup pesanan dengan pembayaran
+lebih dulu berarti membangun alur pengembalian dana untuk hal yang bisa
+diselesaikan dalam satu pesan.
 
 ### Voucher dan status pesanan masuk ke CRM sejak awal
 

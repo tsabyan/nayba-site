@@ -11,27 +11,30 @@ urutan: 1
 tampilkan: true
 ringkasan: >-
   Dokumen dinas hanya ada dalam bentuk fisik: rentan rusak dimakan usia, dan
-  sulit ditemukan saat dibutuhkan. Kami bangun sistem arsip digital tempat hasil
-  pindai disimpan rapi, dicari, dan disaring.
-peran:
-  ["Discovery", "UI/UX design", "Pembangunan", "Migrasi data", "Buku panduan"]
+  bisa memakan waktu berjam-jam untuk ditemukan. Kami bangun sistem arsip
+  digital tempat hasil pindai disimpan, dicari, dan diunduh.
+peran: ["Discovery", "UI/UX design", "Pembangunan", "Buku panduan"]
 tumpukan: ["Laravel", "Tailwind CSS", "MySQL"]
 hasil:
+  - angka: "Berjam-jam → menit"
+    label: "Mencari satu dokumen"
+    catatan: "Perkiraan dari cara kerja sebelum dan sesudah, bukan hasil pengukuran"
   - angka: "8 minggu"
     label: "Discovery sampai serah terima"
-    catatan: "Termasuk migrasi arsip dan buku panduan"
+    catatan: "Termasuk buku panduan"
 ---
 
 ## Konteks
 
 Dokumen dinas disimpan sebagaimana dokumen dinas biasanya disimpan: dalam bentuk
-fisik, di lemari, diurutkan menurut cara yang dipahami orang yang menaruhnya.
+fisik, di rak, diurutkan menurut cara yang dipahami orang yang menaruhnya.
 
 Cara itu punya dua masalah yang saling menguatkan. Yang pertama soal waktu —
 kertas menua, dan arsip yang jarang disentuh tidak ketahuan rusaknya sampai ada
 yang mencarinya. Yang kedua soal pencarian: satu dokumen hanya bisa ditemukan
-kalau ada yang ingat di mana ia diletakkan. Semakin lama arsipnya menumpuk,
-semakin sedikit orang yang ingat.
+kalau ada yang ingat di mana ia diletakkan. Mencari satu berkas bisa memakan
+waktu berjam-jam, dan semakin lama arsipnya menumpuk, semakin sedikit orang yang
+ingat.
 
 Keduanya bertemu di titik yang sama. Dokumen yang sulit dicari jadi jarang
 dibuka, dan dokumen yang jarang dibuka adalah dokumen yang kerusakannya baru
@@ -42,12 +45,27 @@ ketahuan ketika sudah terlambat.
 - Discovery: memetakan jenis dokumen yang diarsipkan dan bagaimana selama ini
   dicari kembali
 - Sistem arsip digital untuk menyimpan hasil pindai beserta keterangannya
-- Pencarian dan penyaringan, supaya dokumen ditemukan lewat isinya, bukan lewat
-  ingatan siapa yang terakhir memegangnya
-- Migrasi arsip yang sudah ada ke dalam sistem
+- Pencarian dan penyaringan, supaya dokumen ditemukan lewat keterangannya, bukan
+  lewat ingatan siapa yang terakhir memegangnya
+- Unduh berkas hasil pindai
 - Buku panduan penggunaan
 
+Pemindaian dan pengunggahan dilakukan sendiri oleh dinas. Kami menyerahkan
+aplikasinya, bukan arsipnya — dinas yang paling tahu dokumen mana yang perlu
+didahulukan dan bagaimana mengelompokkannya.
+
 ## Keputusan penting
+
+### Satu kode dokumen dipakai di aplikasi dan di rak
+
+Setiap dokumen memakai kode yang sama di aplikasi dan pada berkas fisiknya. Itu
+membuat pencarian di aplikasi menjawab dua pertanyaan sekaligus: hasil pindainya
+bisa langsung diunduh, dan kalau yang dibutuhkan adalah lembar aslinya, kodenya
+menunjukkan di rak mana ia disimpan.
+
+Digitalisasi sering diperlakukan sebagai pengganti arsip fisik. Untuk dokumen
+dinas itu bukan pilihan yang tersedia — lembar aslinya tetap harus ada. Jadi
+sistem ini tidak menggantikan raknya, melainkan menjadi indeksnya.
 
 ### Buku panduan dihitung sebagai bagian pekerjaan, bukan lampiran
 
@@ -55,9 +73,3 @@ Sistem internal di lingkungan kerja yang stafnya berganti akan ditinggalkan
 kalau cara memakainya hanya ada di kepala orang yang kebetulan ikut pelatihan.
 Buku panduan dikerjakan sebagai bagian dari lingkup, bukan sebagai berkas yang
 dikirim belakangan setelah serah terima.
-
-### Pencarian dirancang untuk orang yang tidak tahu harus mencari apa
-
-Arsip fisik menuntut penggunanya tahu lebih dulu dokumen mana yang ia butuhkan.
-Penyaringan dibuat supaya pencarian bisa dimulai dari yang samar — periode,
-jenis dokumen — lalu dipersempit, bukan hanya dari kata kunci yang tepat.
