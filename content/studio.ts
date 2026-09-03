@@ -43,6 +43,20 @@ export const studio = {
   formKey: process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "",
 
   /**
+   * hCaptcha site key.
+   *
+   * The default is the shared key Web3Forms issues to every free-plan form —
+   * public by design and not worth hiding. Paid plans get their own, which is
+   * why this reads an override rather than being a constant.
+   *
+   * This must stay in step with the dashboard: hCaptcha enabled there makes a
+   * captcha token mandatory on every submission, so a form that does not send
+   * one is rejected outright.
+   */
+  captchaKey:
+    process.env.NEXT_PUBLIC_HCAPTCHA_KEY || "50b2fe65-b00b-4b9e-ad62-3ba471098be2",
+
+  /**
    * Analytics ids. Each renders nothing while empty, so a fresh clone ships
    * no third-party script at all.
    *

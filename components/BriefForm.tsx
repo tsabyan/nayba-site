@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Isian, kelasKontrol, kelasPilih } from "@/components/ui/Isian";
 import { TombolAksi } from "@/components/ui/Tombol";
 import { studio } from "@/content/studio";
@@ -23,9 +24,20 @@ const mulai = ["Secepatnya", "1–3 bulan lagi", "Lebih dari 3 bulan", "Belum ta
 const JEDA_MINIMUM_MS = 3000;
 
 export function BriefForm() {
-  const [status, setStatus] = useState<"diam" | "kirim" | "sukses" | "gagal">("diam");
+  const [status, setStatus] = useState<
+    "diam" | "kirim" | "sukses" | "gagal" | "kurang"
+  >("diam");
   const [galat, setGalat] = useState("");
   const dimuat = useRef(0);
+
+  /* hCaptcha is switched on in the Web3Forms dashboard, which makes the token
+     mandatory server-side — a submission without one is rejected outright. The
+     honeypot and the timing gate below still earn their place: they cost a
+     visitor nothing, while the captcha is the only one of the three that also
+     stops someone posting straight to the API with the access key read out of
+     this page. */
+  const [captcha, setCaptcha] = useState("");
+  const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
     dimuat.current = Date.now();
@@ -42,6 +54,13 @@ export function BriefForm() {
     if (dimuat.current === 0) return;
     if (Date.now() - dimuat.current < JEDA_MINIMUM_MS) return;
 
+    // Said here rather than left to the server, whose rejection reads as a
+    // generic failure and gives no hint that a box was missed.
+    if (!captcha) {
+      setStatus("kurang");
+      return;
+    }
+
     setStatus("kirim");
     setGalat("");
 
@@ -55,7 +74,7 @@ export function BriefForm() {
       cerita: String(data.get("cerita") ?? ""),
     };
 
-    const hasil = await kirimBrief(brief);
+    const hasil = await kirimBrief(brief, captcha);
     if (hasil.ok) {
       setStatus("sukses");
       form.reset();
@@ -63,6 +82,11 @@ export function BriefForm() {
       setStatus("gagal");
       setGalat(hasil.pesan);
     }
+
+    /* A token is single-use whichever way the request went. Leaving the solved
+       widget on screen after a failure invites a retry that cannot succeed. */
+    captchaRef.current?.resetCaptcha();
+    setCaptcha("");
   }
 
   if (status === "sukses") {
@@ -165,11 +189,30 @@ export function BriefForm() {
         />
       </div>
 
+      {/* Above the button, not beside it: the widget can grow to a full puzzle
+          when hCaptcha is suspicious, and anything sitting next to it would be
+          pushed around mid-interaction. */}
+      <div className="mt-10">
+        <HCaptcha
+          ref={captchaRef}
+          sitekey={studio.captchaKey}
+          reCaptchaCompat={false}
+          languageOverride="id"
+          onVerify={(token) => setCaptcha(token)}
+          onExpire={() => setCaptcha("")}
+          onError={() => setCaptcha("")}
+        />
+      </div>
+
       <div className="mt-10 flex flex-wrap items-center gap-6">
         <TombolAksi type="submit" disabled={status === "kirim"}>
           {status === "kirim" ? "Mengirim…" : "Kirim brief"}
         </TombolAksi>
+        {/* Two different failures, two different sentences. Nothing was sent
+            when the captcha is unticked, so saying "gagal terkirim" would send
+            the visitor looking for a fault that is not there. */}
         <p aria-live="polite" className="text-sm">
+          {status === "kurang" && "Centang dulu kotak verifikasi di atas."}
           {status === "gagal" &&
             `Gagal terkirim — ${galat} Coba lagi, atau kirim lewat WhatsApp.`}
         </p>

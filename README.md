@@ -155,6 +155,37 @@ proyek itu sendiri dan tetap rapi.
 Kalau data di layar tidak boleh terlihat, ganti isinya dengan data contoh yang
 masuk akal, jangan diburamkan. Buram terbaca sebagai ada yang disembunyikan.
 
+## Formulir brief & hCaptcha
+
+Brief dikirim langsung dari browser ke Web3Forms — tidak ada route handler di
+proyek ini. Tiga lapis penyaring, dan hanya satu di antaranya yang berarti:
+
+| Lapis | Menahan | Batasnya |
+|---|---|---|
+| Honeypot (`website-perusahaan`) | bot yang mengisi semua kolom | hanya yang memakai formulir ini |
+| Jeda minimum 3 detik | bot yang mengisi lebih cepat dari manusia membaca | sama |
+| hCaptcha | siapa pun, termasuk yang mengirim langsung ke API | — |
+
+Access key Web3Forms memang publik dan terbaca di HTML halaman ini. Artinya dua
+lapis pertama bisa dilewati begitu saja dengan mengirim POST sendiri ke
+`api.web3forms.com`. hCaptcha satu-satunya yang tidak bisa, karena token-nya
+diperiksa di sisi Web3Forms.
+
+**Dua tempat ini harus selalu sejalan.** hCaptcha aktif di dasbor Web3Forms
+membuat token wajib pada setiap kiriman; formulir yang tidak mengirim
+`h-captcha-response` ditolak mentah-mentah. Jadi kalau captcha dimatikan di
+dasbor, komponen `<HCaptcha>` di `components/BriefForm.tsx` boleh ikut dicabut —
+dan sebaliknya, jangan pernah menyalakannya di dasbor tanpa memasang widgetnya.
+
+Site key bawaan (`50b2fe65-…`) adalah kunci bersama untuk paket gratis
+Web3Forms — publik, dan tidak perlu disembunyikan. Paket berbayar memakai kunci
+sendiri; isi lewat `NEXT_PUBLIC_HCAPTCHA_KEY`.
+
+hCaptcha memuat skrip, iframe, dan gayanya dari `hcaptcha.com`, jadi keempat
+host itu terdaftar di CSP (`script-src`, `style-src`, `frame-src`,
+`connect-src`) di `next.config.ts`. Menghapusnya dari sana membuat kotak
+verifikasi tidak muncul sama sekali.
+
 ## Pemeriksaan
 
 `npm run periksa` jalan otomatis sebelum `npm run build`. Tiga kelompok:

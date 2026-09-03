@@ -32,6 +32,7 @@ const pengembangan = process.env.NODE_ENV === "development";
 
 const script = [
   "script-src 'self' 'unsafe-inline'",
+  "https://hcaptcha.com https://*.hcaptcha.com",
   pengembangan ? "'unsafe-eval'" : null,
   "https://www.googletagmanager.com",
   "https://va.vercel-scripts.com",
@@ -42,7 +43,7 @@ const script = [
 const csp = [
   "default-src 'self'",
   script,
-  "style-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com",
   "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com",
   [
     "connect-src 'self'",
@@ -52,9 +53,11 @@ const csp = [
     "https://analytics.google.com",
     "https://va.vercel-scripts.com",
     "https://vitals.vercel-insights.com",
+    "https://hcaptcha.com",
+    "https://*.hcaptcha.com",
   ].join(" "),
   "font-src 'self'",
-  "frame-src 'self' https://www.googletagmanager.com",
+  "frame-src 'self' https://www.googletagmanager.com https://hcaptcha.com https://*.hcaptcha.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",

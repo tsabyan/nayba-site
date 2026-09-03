@@ -19,13 +19,21 @@ export type HasilKirim = { ok: true } | { ok: false; pesan: string };
  * account beyond an inbox. Swapping to a route handler with Resend later means
  * rewriting this function and nothing else.
  */
-export async function kirimBrief(brief: Brief): Promise<HasilKirim> {
+export async function kirimBrief(
+  brief: Brief,
+  /**
+   * hCaptcha token. Required — the dashboard has hCaptcha switched on, and
+   * Web3Forms rejects any submission without `h-captcha-response` once it is.
+   */
+  captcha: string,
+): Promise<HasilKirim> {
   try {
     const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         access_key: studio.formKey,
+        "h-captcha-response": captcha,
         from_name: "Website Nayba",
         subject: `Brief baru — ${brief.perusahaan || brief.nama}`,
         Nama: brief.nama,
