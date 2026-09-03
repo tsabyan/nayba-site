@@ -16,27 +16,42 @@ export function PlatKarya({
   rasio = "16 / 10",
   nada = "biru",
   skala = false,
+  sumber = "utama",
+  sizes = "(min-width: 1024px) 30vw, 100vw",
 }: {
   karya: Karya;
   urutan: number;
   rasio?: string;
   nada?: "biru" | "gelap" | "terang";
   skala?: boolean;
+  /** Which crop this slot wants. The banner falls back to the card image. */
+  sumber?: "utama" | "lebar";
+  /**
+   * What width this slot actually occupies, so Next can pick a file that fits.
+   *
+   * Has to be passed per usage. It used to be hardcoded to 60vw for all three
+   * slots, which is wrong in both directions: the full-bleed banner is 100vw
+   * and got a file sized for 1152px stretched across 1905px — visibly soft —
+   * while the homepage card is nearer 30vw and was over-served.
+   */
+  sizes?: string;
 }) {
   const utama = karya.hasil[0];
   const gerak = skala ? { className: "skala", "data-maju": "" } : {};
+  const gambar =
+    sumber === "lebar" ? (karya.gambarLebar ?? karya.gambarUtama) : karya.gambarUtama;
 
-  if (karya.gambarUtama) {
+  if (gambar) {
     return (
       <div
         style={{ aspectRatio: rasio }}
         className="relative overflow-hidden bg-kabu"
       >
         <Image
-          src={karya.gambarUtama}
+          src={gambar}
           alt=""
           fill
-          sizes="(min-width: 1024px) 60vw, 100vw"
+          sizes={sizes}
           {...gerak}
           className={`object-cover ${skala ? "skala" : ""}`}
         />

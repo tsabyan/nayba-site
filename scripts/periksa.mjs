@@ -108,6 +108,18 @@ if (contoh.length && !process.env.IZINKAN_CONTOH) {
   );
 }
 
+/* A bypass nobody is using is a bypass nobody remembers is on. This one was
+   switched on once and stayed on, and the next person to add a contoh- file
+   would have shipped it without a word. Warned, not failed — a leftover flag is
+   untidy, not dangerous, and breaking a deploy over it would be worse. */
+if (!contoh.length && process.env.IZINKAN_CONTOH) {
+  console.warn(
+    "\n⚠ IZINKAN_CONTOH masih aktif padahal tidak ada studi kasus contoh.\n" +
+      "  Hapus dari Vercel → Settings → Environment Variables dan dari .env.local,\n" +
+      "  supaya pemeriksaan contoh kembali menjaga.\n",
+  );
+}
+
 /* 3 — Claims the site must never make. Always checked. */
 const terlarang = [
   { pola: /\bPT\s+[A-Z]\w/, kenapa: "Nayba belum berbadan hukum — jangan memakai awalan PT." },

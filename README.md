@@ -113,6 +113,41 @@ Catatan hukum: GA4 dan GTM menaruh cookie. Situs ini belum punya banner
 persetujuan. Untuk pengunjung Indonesia itu belum jadi kewajiban, tapi begitu
 ada trafik Uni Eropa yang serius, banner persetujuan wajib ditambahkan.
 
+## Portofolio
+
+Satu berkas MDX per proyek di `content/portofolio/`. Frontmatter-nya dibaca
+`lib/content.ts`; isi di bawah frontmatter dirender sebagai MDX.
+
+Nama klien hanya muncul kalau `izinNama: true`. Gerbangnya ada di lapisan data
+(`namaKlien()`), bukan di template, supaya NDA tidak bisa bocor karena lupa —
+tanpa izin, yang tampil adalah `Sektor, Kota`.
+
+### Gambar
+
+Dua berkas per proyek, karena satu potongan tidak bisa melayani dua bentuk:
+memotong tangkapan layar 16:11 menjadi 2,5:1 membuang sebagian besar antarmuka
+yang justru ingin ditunjukkan.
+
+| Bidang | Rasio | Ukuran yang disiapkan | Dipakai di |
+|---|---|---|---|
+| `gambarUtama` | 16:11 | **1600 × 1100** | Kartu di beranda dan indeks portofolio |
+| `gambarLebar` | 2,5:1 | **2880 × 1150** | Spanduk penuh di halaman studi kasus |
+
+Angka itu 2× dari ukuran render sebenarnya pada layar 1920px (547 × 376 dan
+1905 × 760), karena isinya tangkapan layar — teks di dalamnya butuh kerapatan
+piksel. Taruh berkasnya di `public/karya/`, lalu tulis jalurnya di frontmatter:
+
+```yaml
+gambarUtama: /karya/nama-proyek-kartu.webp
+gambarLebar: /karya/nama-proyek-spanduk.webp
+```
+
+PNG atau WebP sama saja — Next mengubahnya ke AVIF/WebP saat disajikan. Tanpa
+gambar, slotnya memakai panel fakta proyek itu sendiri dan tetap rapi.
+
+Kalau data di layar tidak boleh terlihat, ganti isinya dengan data contoh yang
+masuk akal, jangan diburamkan. Buram terbaca sebagai ada yang disembunyikan.
+
 ## Pemeriksaan
 
 `npm run periksa` jalan otomatis sebelum `npm run build`. Tiga kelompok:
@@ -123,9 +158,10 @@ ada trafik Uni Eropa yang serius, banner persetujuan wajib ditambahkan.
    Web3Forms terlihat hidup tapi tidak menghasilkan apa pun — itu cara paling
    mahal untuk rusak.
 2. **Studi kasus contoh** — `content/portofolio/contoh-*.mdx` memblokir build
-   kecuali `IZINKAN_CONTOH=1`. Saat ini flag itu **aktif di Vercel**, jadi empat
-   studi kasus contoh terbit dan terindeks. Hapus flag dan berkasnya begitu ada
-   pekerjaan asli.
+   kecuali `IZINKAN_CONTOH=1`. Empat contoh yang sempat tayang sudah dihapus,
+   jadi flag itu tidak lagi diperlukan dan harus dicabut dari Vercel. Kalau
+   flag masih aktif sementara tidak ada berkas contoh, `periksa` memperingatkan
+   — bypass yang menyala tanpa dipakai adalah bypass yang dilupakan.
 3. **Klaim terlarang** — tanpa `PT`/`CV`, alamat jalan, atau superlatif. Tidak
    bisa dilewati.
 

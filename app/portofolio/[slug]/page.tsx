@@ -31,7 +31,9 @@ export default async function HalamanKarya({
 
   const semua = semuaKarya();
   const posisi = semua.findIndex((x) => x.slug === k.slug);
-  const berikut = semua[(posisi + 1) % semua.length];
+  /* Undefined while this is the only case study — the modulo would otherwise
+     wrap to the project you are already reading and offer it as the next one. */
+  const berikut = semua.length > 1 ? semua[(posisi + 1) % semua.length] : undefined;
 
 
   return (
@@ -59,6 +61,8 @@ export default async function HalamanKarya({
         rasio="1920 / 766"
         nada="gelap"
         skala
+        sumber="lebar"
+        sizes="100vw"
       />
 
       <section className="py-20 md:py-28">

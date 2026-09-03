@@ -22,7 +22,16 @@ export type Karya = {
   peran: string[];
   tumpukan: string[];
   hasil: Hasil[];
+  /**
+   * Card crop, 16:11. Used on the homepage and the portfolio index.
+   *
+   * Separate from `gambarLebar` because one file cannot serve both: the banner
+   * is 2.5:1, and cropping a 16:11 screenshot that wide throws away most of the
+   * interface it was meant to show.
+   */
   gambarUtama?: string;
+  /** Banner crop, 2.5:1, full-bleed on the case study page. */
+  gambarLebar?: string;
   tampilkan: boolean;
   urutan: number;
   isi: string;
@@ -59,6 +68,7 @@ function baca(berkas: string): Karya {
     tumpukan: data.tumpukan ?? [],
     hasil: data.hasil ?? [],
     gambarUtama: data.gambarUtama,
+    gambarLebar: data.gambarLebar,
     tampilkan: data.tampilkan !== false,
     urutan: Number(data.urutan ?? 99),
     isi: content,

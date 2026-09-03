@@ -44,7 +44,12 @@ export function KartuKarya({ karya, urutan }: { karya: Karya; urutan: number }) 
           </p>
         </div>
 
-        <PlatKarya karya={karya} urutan={urutan} rasio="16 / 11" />
+        <PlatKarya
+          karya={karya}
+          urutan={urutan}
+          rasio="16 / 11"
+          sizes="(min-width: 1024px) 30vw, 100vw"
+        />
       </div>
     </Link>
   );
