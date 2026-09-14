@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { studio } from "@/content/studio";
-import { pesanWA, tautanWA } from "@/lib/wa";
+import { pesanWA } from "@/lib/wa";
+import { TautanWA } from "@/components/ui/TautanWA";
 import { Kontainer } from "./Kontainer";
-
-const sosial = [{ label: "WhatsApp", href: tautanWA(pesanWA.umum) }];
 
 /**
  * The reference fixes its footer and lets the page scroll over it, so the CTA
@@ -22,28 +21,23 @@ export function Footer() {
 
         <p className="tampil mt-6 text-ajakan text-putih">
           Atau sapa kami di{" "}
-          <a
-            href={tautanWA(pesanWA.umum)}
-            target="_blank"
-            rel="noopener noreferrer"
+          <TautanWA
+            asal="kaki-ajakan"
+            pesan={pesanWA.umum}
             className="pelan underline decoration-2 underline-offset-[0.12em] hover:text-tinta"
           >
             WhatsApp
-          </a>
+          </TautanWA>
         </p>
 
         <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-putih/25 pt-8 max-md:justify-center">
-          {sosial.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pelan font-display text-sm font-bold tracking-[1.1px] uppercase hover:text-tinta"
-            >
-              {s.label}
-            </a>
-          ))}
+          <TautanWA
+            asal="kaki-tautan"
+            pesan={pesanWA.umum}
+            className="pelan font-display text-sm font-bold tracking-[1.1px] uppercase hover:text-tinta"
+          >
+            WhatsApp
+          </TautanWA>
           <Link
             href="/kontak"
             className="pelan font-display text-sm font-bold tracking-[1.1px] uppercase hover:text-tinta"

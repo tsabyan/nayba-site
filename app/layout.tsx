@@ -3,8 +3,9 @@ import { Barlow_Condensed, Poppins } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Gerak } from "@/components/Gerak";
-import { AtasCepat } from "@/components/AtasCepat";
+import { WAMelayang } from "@/components/WAMelayang";
 import { DataTerstruktur } from "@/components/DataTerstruktur";
+import { Analitik } from "@/components/Analitik";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { studio } from "@/content/studio";
@@ -44,6 +45,23 @@ export const metadata: Metadata = {
     url: studio.website,
   },
   robots: { index: true, follow: true },
+  /**
+   * Search Console ownership.
+   *
+   * Read straight from the environment rather than through content/studio.ts:
+   * that module is imported by client components, and a non-NEXT_PUBLIC value
+   * placed there would silently read as empty in the browser bundle. Metadata
+   * is built on the server, so a server-only variable is both safe and correct
+   * here — the token is not a secret, but it has no business being shipped to
+   * every visitor either.
+   *
+   * Empty emits no tag, which is what a fork of this repo should do. Prefer
+   * the DNS TXT method in Search Console if the domain is reachable that way:
+   * it survives a redeploy that drops this variable.
+   */
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -70,7 +88,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </div>
 
         <Footer />
-        <AtasCepat />
+        <WAMelayang />
         <Gerak />
         <DataTerstruktur />
 
@@ -80,6 +98,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Analytics />
         {studio.analitik.ga && <GoogleAnalytics gaId={studio.analitik.ga} />}
         {studio.analitik.gtm && <GoogleTagManager gtmId={studio.analitik.gtm} />}
+
+        {/* PostHog is the one that answers "did this page produce a
+            conversation": it captures the brief submissions and the WhatsApp
+            clicks, which neither Vercel nor GA is wired to see. Renders nothing
+            without NEXT_PUBLIC_POSTHOG_KEY. */}
+        <Analitik />
       </body>
     </html>
   );

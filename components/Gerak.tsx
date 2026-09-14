@@ -30,7 +30,6 @@ export function Gerak() {
   useEffect(() => {
     let sisa = Array.from(document.querySelectorAll<HTMLElement>(REVEAL));
     const terikat = Array.from(document.querySelectorAll<HTMLElement>(LINKED));
-    const naik = document.querySelector<HTMLElement>("[data-naik]");
     let timer: ReturnType<typeof setTimeout> | undefined;
 
     const jepit = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -61,8 +60,6 @@ export function Gerak() {
       terikat.forEach((el, i) => {
         el.style.setProperty("--maju", nilai[i].toFixed(4));
       });
-
-      if (naik) naik.dataset.naik = window.scrollY > 600 ? "tampil" : "sembunyi";
     };
 
     const periksa = () => {

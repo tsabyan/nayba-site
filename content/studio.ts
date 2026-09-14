@@ -68,6 +68,27 @@ export const studio = {
     ga: process.env.NEXT_PUBLIC_GA_ID || "",
     /** Google Tag Manager container id, `GTM-XXXXXXX`. */
     gtm: process.env.NEXT_PUBLIC_GTM_ID || "",
+
+    /**
+     * PostHog project API key, `phc_…`.
+     *
+     * Public by design: it is write-only, so the worst a copied key can do is
+     * post events into the project. Reading anything needs a personal API key,
+     * which never goes near the browser.
+     *
+     * Empty means no PostHog script is loaded at all, which is what a fresh
+     * clone should do.
+     */
+    posthogKey: process.env.NEXT_PUBLIC_POSTHOG_KEY || "",
+
+    /**
+     * Cloud region, `us` or `eu`. Picked when the project was created and not
+     * changeable afterwards — the wrong one here sends every event to a host
+     * that does not know the key, and the failure is silent in the browser.
+     *
+     * Read again in next.config.ts, which cannot import from here.
+     */
+    posthogWilayah: process.env.NEXT_PUBLIC_POSTHOG_REGION === "eu" ? "eu" : "us",
   },
 
   sosial: {
@@ -75,6 +96,19 @@ export const studio = {
     linkedin: process.env.NEXT_PUBLIC_LINKEDIN || "",
   },
 };
+
+/**
+ * Where the PostHog UI lives, as opposed to where events are sent.
+ *
+ * Events go to `/ph`, a same-origin rewrite (see next.config.ts) — that is what
+ * keeps a content blocker from removing the analytics of a site whose whole
+ * point is measuring whether visitors convert. `ui_host` only builds the links
+ * that open a recording or a person in PostHog, so it must stay the real host.
+ */
+export const posthogUi =
+  studio.analitik.posthogWilayah === "eu"
+    ? "https://eu.posthog.com"
+    : "https://us.posthog.com";
 
 /**
  * The hero fact strip. Four things a studio only knows by running projects.
