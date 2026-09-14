@@ -5,17 +5,13 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Isian, kelasKontrol, kelasPilih } from "@/components/ui/Isian";
 import { TombolAksi } from "@/components/ui/Tombol";
 import { studio } from "@/content/studio";
+/* Same list the public pricing page prints. Kept in one place so the page
+   cannot promise one set of brackets while the form beneath offers another. */
+import { anggaran } from "@/content/harga";
 import { kirimBrief, type Brief } from "@/lib/kirim";
-import { pesanWA, tautanWA } from "@/lib/wa";
-
-/** Adjust these to the bracket you actually work in. */
-const anggaran = [
-  "Di bawah Rp 25 juta",
-  "Rp 25–50 juta",
-  "Rp 50–100 juta",
-  "Di atas Rp 100 juta",
-  "Belum tahu",
-];
+import { pesanWA } from "@/lib/wa";
+import { TautanWA } from "@/components/ui/TautanWA";
+import { lacak } from "@/lib/analitik";
 
 const jenis = ["Website perusahaan", "Aplikasi web / sistem", "Belum yakin"];
 const mulai = ["Secepatnya", "1–3 bulan lagi", "Lebih dari 3 bulan", "Belum tahu"];
@@ -77,10 +73,20 @@ export function BriefForm() {
     const hasil = await kirimBrief(brief, captcha);
     if (hasil.ok) {
       setStatus("sukses");
+      /* Shape only. Name, company, contact and the story stay out of analytics
+         on purpose — see lib/analitik.ts. */
+      lacak("brief_dikirim", {
+        jenis: brief.jenis,
+        anggaran: brief.anggaran,
+        mulai: brief.mulai,
+      });
       form.reset();
     } else {
       setStatus("gagal");
       setGalat(hasil.pesan);
+      /* Counted separately because a form that breaks looks exactly like a form
+         nobody wanted, and the two need completely different responses. */
+      lacak("brief_gagal", { sebab: hasil.pesan });
     }
 
     /* A token is single-use whichever way the request went. Leaving the solved
@@ -96,14 +102,13 @@ export function BriefForm() {
         <p className="mt-5">
           Kami balas dalam empat jam kerja. Kalau butuh lebih cepat, kirim pesan
           ke{" "}
-          <a
-            href={tautanWA(pesanWA.setelahBrief)}
-            target="_blank"
-            rel="noopener noreferrer"
+          <TautanWA
+            asal="setelah-brief"
+            pesan={pesanWA.setelahBrief}
             className="text-biru underline underline-offset-4"
           >
             WhatsApp
-          </a>
+          </TautanWA>
           .
         </p>
       </div>
