@@ -7,6 +7,7 @@ import { Tanda } from "./Tanda";
 
 const tautan = [
   { href: "/layanan", label: "Layanan" },
+  { href: "/harga", label: "Harga" },
   { href: "/portofolio", label: "Portofolio" },
   { href: "/proses", label: "Proses" },
   { href: "/tentang", label: "Tentang" },

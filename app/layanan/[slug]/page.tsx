@@ -5,6 +5,8 @@ import { Kontainer } from "@/components/layout/Kontainer";
 import { Muncul } from "@/components/ui/Muncul";
 import { Kerjasama } from "@/components/sections/Kerjasama";
 import { layanan, satuLayanan } from "@/content/layanan";
+import { Skema } from "@/components/Skema";
+import { dasar, idOrganisasi, remah, tanyaJawab } from "@/lib/skema";
 
 export function generateStaticParams() {
   return layanan.map((l) => ({ slug: l.slug }));
@@ -26,8 +28,52 @@ export default async function HalamanLayananDetail({
   const l = satuLayanan(slug);
   if (!l) notFound();
 
+  /**
+   * Service, not Product or Offer.
+   *
+   * Product/Offer both want a price, and Nayba has none to state — see
+   * content/harga.ts. An Offer without `price` is legal markup but reads as an
+   * incomplete listing, and inventing the number to complete it is the one
+   * thing this site refuses to do. Service carries everything that IS true:
+   * what the work is, who provides it, where, and how long it takes.
+   */
+  const skemaLayanan = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${dasar}/layanan/${l.slug}#layanan`,
+    name: l.nama,
+    description: l.ringkas,
+    serviceType: l.nama,
+    provider: { "@id": idOrganisasi },
+    areaServed: { "@type": "Country", name: "Indonesia" },
+    availableLanguage: ["id"],
+    url: `${dasar}/layanan/${l.slug}`,
+    /* The delivery window is the one hard number on the page, and it is the
+       number buyers compare studios on. */
+    termsOfService: `${dasar}/harga`,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Termasuk dalam ${l.nama}`,
+      itemListElement: l.termasuk.map((t) => ({
+        "@type": "OfferCatalog",
+        name: t,
+      })),
+    },
+  };
+
   return (
     <>
+      <Skema data={skemaLayanan} />
+      <Skema
+        data={remah([
+          { nama: "Layanan", href: "/layanan" },
+          { nama: l.nama, href: `/layanan/${l.slug}` },
+        ])}
+      />
+      {/* Every question here is rendered below in the visible `<dl>`. Markup
+          for text a visitor cannot see is a spam signal, not an optimisation. */}
+      <Skema data={tanyaJawab(l.tanya)} />
+
       <Panji mata={l.durasi} judul={l.nama} ringkas={l.ringkas} />
 
       <section className="py-20 md:py-28">

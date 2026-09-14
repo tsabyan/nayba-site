@@ -3,7 +3,10 @@ import { Panji } from "@/components/layout/Panji";
 import { Kontainer } from "@/components/layout/Kontainer";
 import { Muncul } from "@/components/ui/Muncul";
 import { BriefForm } from "@/components/BriefForm";
-import { pesanWA, tautanWA } from "@/lib/wa";
+import { pesanWA } from "@/lib/wa";
+import { TautanWA } from "@/components/ui/TautanWA";
+import { Skema } from "@/components/Skema";
+import { remah } from "@/lib/skema";
 
 export const metadata: Metadata = {
   title: "Kontak",
@@ -18,19 +21,28 @@ const jalur = [
     nama: "WhatsApp",
     ringkas: "Paling cepat. Cocok untuk pertanyaan pendek atau sekadar memastikan kami cocok.",
     aksi: "Buka WhatsApp",
-    href: tautanWA(pesanWA.kontak),
+    /* Rendered through TautanWA rather than the plain anchor below, because a
+       WhatsApp click leaves no other trace that the page worked. */
+    wa: true as const,
+    href: "",
   },
   {
     nama: "Brief tertulis",
     ringkas: "Kalau lebih enak menulis dulu. Formulirnya ada di bawah, dan langsung masuk ke inbox kami.",
     aksi: "Ke formulir",
+    wa: false as const,
     href: "#brief",
   },
 ];
 
+const kelasAksi =
+  "pelan mt-7 inline-flex items-center gap-3 font-display text-sm font-bold tracking-[1.1px] text-biru uppercase hover:gap-5";
+
 export default function HalamanKontak() {
   return (
     <>
+      <Skema data={remah([{ nama: "Kontak", href: "/kontak" }])} />
+
       <Panji
         mata="Kontak"
         judul="Ceritakan yang mau dikerjakan"
@@ -44,15 +56,15 @@ export default function HalamanKontak() {
               <Muncul key={j.nama} jenis="naik" urutan={i} durasi={1.2}>
                 <dt className="tampil text-anak">{j.nama}</dt>
                 <dd className="mt-5">{j.ringkas}</dd>
-                <a
-                  href={j.href}
-                  {...(j.href.startsWith("http")
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                  className="pelan mt-7 inline-flex items-center gap-3 font-display text-sm font-bold tracking-[1.1px] text-biru uppercase hover:gap-5"
-                >
-                  {j.aksi} <span aria-hidden>→</span>
-                </a>
+                {j.wa ? (
+                  <TautanWA asal="kontak-kartu" pesan={pesanWA.kontak} className={kelasAksi}>
+                    {j.aksi} <span aria-hidden>→</span>
+                  </TautanWA>
+                ) : (
+                  <a href={j.href} className={kelasAksi}>
+                    {j.aksi} <span aria-hidden>→</span>
+                  </a>
+                )}
               </Muncul>
             ))}
           </dl>
