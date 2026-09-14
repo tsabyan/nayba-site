@@ -94,6 +94,35 @@ if (gtm && !/^GTM-[A-Z0-9]{5,}$/.test(gtm)) {
   galat.push(`NEXT_PUBLIC_GTM_ID="${gtm}" bukan container id GTM (bentuknya GTM-XXXXXXX).`);
 }
 
+/* PostHog fails in the one way that is hardest to notice: a wrong key or a
+   wrong region is accepted by the browser, sends events into nothing, and
+   leaves a dashboard that simply reads zero. Nobody investigates a zero on a
+   new site — they assume it is the traffic. */
+const ph = env("NEXT_PUBLIC_POSTHOG_KEY");
+if (ph && !/^phc_[A-Za-z0-9]{20,}$/.test(ph)) {
+  galat.push(
+    `NEXT_PUBLIC_POSTHOG_KEY="${ph}" bukan project API key PostHog (bentuknya phc_…). ` +
+      `Ambil di PostHog → Settings → Project → Project API key.`,
+  );
+}
+
+const wilayahPH = env("NEXT_PUBLIC_POSTHOG_REGION");
+if (wilayahPH && !["us", "eu"].includes(wilayahPH)) {
+  galat.push(
+    `NEXT_PUBLIC_POSTHOG_REGION="${wilayahPH}" harus "us" atau "eu". ` +
+      `Wilayah ditentukan saat proyek dibuat dan tidak bisa diubah — salah isi ` +
+      `berarti /ph meneruskan ke host yang tidak mengenal kuncinya, dan gagalnya diam.`,
+  );
+}
+
+const verifikasi = env("GOOGLE_SITE_VERIFICATION");
+if (verifikasi && /^(google-site-verification=|<meta)/.test(verifikasi)) {
+  galat.push(
+    `GOOGLE_SITE_VERIFICATION berisi seluruh tag atau awalan "google-site-verification=". ` +
+      `Isi token-nya saja — bagian setelah content="…".`,
+  );
+}
+
 /* 2 — Example case studies. Bypassable while the real portfolio is empty. */
 const dirKarya = path.join(akar, "content/portofolio");
 const contoh = fs.existsSync(dirKarya)
@@ -129,6 +158,28 @@ const terlarang = [
   { pola: /\bterpercaya\b/i, kenapa: "Superlatif tanpa bukti." },
   { pola: /\bnomor satu\b/i, kenapa: "Superlatif tanpa bukti." },
   { pola: /\bsolusi digital\b/i, kenapa: "Frasa kosong." },
+  /* Added after reading a competitor that leads with "100+ pemilik UMKM" and
+     "99.9% Puas", neither of which it markup-s in schema — because it knows it
+     cannot stand behind them. Nayba has no client count worth publishing and no
+     satisfaction survey at all, so the honest number is no number. */
+  /* The "N+" construction itself, not the noun after it. A first pass listed
+     nouns — klien, pelanggan, proyek — and sailed straight past "100+ pemilik
+     UMKM", which is the exact phrasing that prompted the rule. The bragging
+     format is the tell; the noun is interchangeable. Verified to match nothing
+     currently in app/, components/, content/ or lib/. */
+  {
+    pola: /\b\d[\d.,]*\s*\+\s*\w/,
+    kenapa:
+      'Pola klaim jumlah ("100+ …"). Nayba tidak punya angka klien atau proyek yang bisa dibuktikan.',
+  },
+  {
+    pola: /\b\d[\d.,]*\s*(klien|pelanggan|pemilik usaha|umkm|proyek selesai|website selesai)\b/i,
+    kenapa: "Jumlah klien atau proyek — tidak boleh diklaim sebelum ada angka yang bisa dibuktikan.",
+  },
+  {
+    pola: /\b\d[\d.,]*\s*%\s*(puas|kepuasan|klien|pelanggan)\b/i,
+    kenapa: "Angka kepuasan tanpa survei yang benar-benar dijalankan.",
+  },
 ];
 
 const dipindai = [".ts", ".tsx", ".mdx"];
