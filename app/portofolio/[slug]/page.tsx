@@ -8,6 +8,8 @@ import { PlatKarya } from "@/components/ui/PlatKarya";
 import { Kerjasama } from "@/components/sections/Kerjasama";
 import { komponenMdx } from "@/components/mdx";
 import { namaKlien, satuKarya, semuaKarya } from "@/lib/content";
+import { Skema } from "@/components/Skema";
+import { dasar, idOrganisasi, remah } from "@/lib/skema";
 
 export function generateStaticParams() {
   return semuaKarya().map((k) => ({ slug: k.slug }));
@@ -35,9 +37,45 @@ export default async function HalamanKarya({
      wrap to the project you are already reading and offer it as the next one. */
   const berikut = semua.length > 1 ? semua[(posisi + 1) % semua.length] : undefined;
 
+  /**
+   * The case study as a piece of work, not as an article.
+   *
+   * `namaKlien` is used rather than `k.klien` so the NDA gate at the data layer
+   * governs the markup too — structured data is the easiest place to leak a
+   * name that every template was careful to redact, because nobody reads it.
+   *
+   * No `review`, no `aggregateRating`: the client has not published one, and a
+   * case study written by us is not a review of us.
+   */
+  const skemaKarya = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `${dasar}/portofolio/${k.slug}#karya`,
+    name: k.judul,
+    description: k.ringkasan,
+    url: `${dasar}/portofolio/${k.slug}`,
+    inLanguage: "id-ID",
+    creator: { "@id": idOrganisasi },
+    /* Year only. That is genuinely all the frontmatter records, and inventing a
+       month to satisfy a fuller date format would be inventing a fact. */
+    dateCreated: String(k.tahun),
+    /* Deduplicated: when the client name is withheld, `namaKlien` falls back to
+       the sector, and joining the two blindly printed it twice. */
+    about: [...new Set([k.sektor, namaKlien(k)].filter(Boolean))].join(" — "),
+    keywords: [...k.layanan, ...k.tumpukan].join(", "),
+    ...(k.gambarLebar ? { image: `${dasar}${k.gambarLebar}` } : {}),
+  };
 
   return (
     <>
+      <Skema data={skemaKarya} />
+      <Skema
+        data={remah([
+          { nama: "Portofolio", href: "/portofolio" },
+          { nama: k.judul, href: `/portofolio/${k.slug}` },
+        ])}
+      />
+
       <section className="pt-16 pb-12 md:pt-24">
         <Kontainer>
           <Muncul jenis="pudar">
